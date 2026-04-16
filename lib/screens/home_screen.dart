@@ -11,7 +11,19 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Discover', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
-        elevation: 0,
+        elevation: 0, // AppBar'ın altındaki gölgeyi kaldırır
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_bag_outlined, color: Colors.black),
+            onPressed: () {
+              // Sepet sayfasına geçiş (Route yönlendirmesi)
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CartScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: Column(
@@ -19,6 +31,18 @@ class HomeScreen extends StatelessWidget {
           children: [
             const Text('Ana Sayfa İskeleti'),
             const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // Detay sayfasına geçiş simülasyonu
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ProductDetailScreen(),
+                  ),
+                );
+              },
+              child: const Text('Örnek Ürüne Git'),
+            ),
           ],
         ),
       ),
