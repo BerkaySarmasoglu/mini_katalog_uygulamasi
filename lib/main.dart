@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'screens/home_screen.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(const MiniCatalogApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MiniCatalogApp extends StatelessWidget {
+  const MiniCatalogApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+    return MaterialApp(
+      title: 'Mini Catalog',
+      debugShowCheckedModeBanner:
+          false, // Sağ üstteki 'DEBUG' yazısını kaldırır
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white, // Temiz bir arka plan
       ),
+      home: const HomeScreen(),
     );
   }
 }
