@@ -1,31 +1,114 @@
 import 'package:flutter/material.dart';
+import '../models/product_model.dart'; // Product modelini kullanabilmek için şart
 
 class ProductDetailScreen extends StatelessWidget {
-  const ProductDetailScreen({super.key});
+  // 1. Değişkeni tanımlıyoruz
+  final Product product;
+
+  // 2. Yapıcı metodu (Constructor) güncelliyoruz - 'product' parametresini zorunlu hale getiriyoruz
+  const ProductDetailScreen({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('Ürün Detay', style: TextStyle(color: Colors.black)),
         backgroundColor: Colors.white,
         elevation: 0,
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ), // Otomatik geri butonunun rengi
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: Text(
+          product.title, // Seçilen ürünün adını başlığa yazdırıyoruz
+          style: const TextStyle(color: Colors.black),
+        ),
       ),
-      body: Center(
+      body: SingleChildScrollView(
+        // İçeriğin taşmaması için kaydırılabilir yapıyoruz [cite: 47]
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Ürün Görseli ve Detayları Buraya Gelecek'),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // Manuel olarak geri dönmek istersen Navigator.pop kullanılır
-                Navigator.pop(context);
-              },
-              child: const Text('Geri Dön'),
+            // Ürün Görseli
+            Container(
+              width: double.infinity,
+              height: 300,
+              color: Colors.grey[100],
+              child: Image.network(
+                product.imageUrl,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.devices, size: 100, color: Colors.grey),
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Fiyat Bilgisi
+                  Text(
+                    '\$${product.price}',
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+
+                  // Ürün Başlığı
+                  Text(
+                    product.title,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  // Ürün Açıklaması (Description) [cite: 80]
+                  const Text(
+                    'Description',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    product.description,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.black87,
+                      height: 1.5,
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  // Sepete Ekle Butonu (Simülasyon için) [cite: 48]
+                  SizedBox(
+                    width: double.infinity,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Burada ileride sepet state'ini güncelleyeceğiz [cite: 106]
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('${product.title} sepete eklendi!'),
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      child: const Text(
+                        'Add to Cart',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
