@@ -26,6 +26,7 @@ lib/
 ├── screens/     # Home, Product Detail ve Cart ekranları
 ├── widgets/     # Özel tasarım bileşenleri (opsiyonel)
 └── main.dart    # Uygulama giriş noktası
+```
 
 Projeyi yerel makinenizde test etmek ve çalıştırmak için aşağıdaki adımları sırasıyla izleyebilirsiniz:
 
@@ -33,17 +34,22 @@ Projeyi yerel makinenizde test etmek ve çalıştırmak için aşağıdaki adım
    Terminal veya komut satırını açarak projeyi bilgisayarınıza indirin.
    ```bash
    git clone https://github.com/BerkaySarmasoglu/mini_katalog_uygulamasi
+   ```
 
 2. **Proje Dizinine Gidin**
     Klonlama işlemi bittikten sonra projenin ana klasörüne geçiş yapın.
     ```bash
     cd mini_katalog_uygulamasi
+    ```
 
 3. **Bağımlılıkları Yükleyin**
     Projede kullanılan http gibi harici paketleri ve kütüphaneleri indirin.
     ```bash
     flutter pub get
+    ```
 
 4. **Uygulamayı başlatın**
     Bilgisayarınıza bağlı bir fiziksel cihazda veya açık olan bir emülatörde projeyi derleyip çalıştırın.
+    ```bash
     flutter run
+    ```
