@@ -112,9 +112,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
                   } else if (snapshot.hasError) {
-                    return Center(child: Text('Hata: ${snapshot.error}'));
+                    return Center(child: Text('Error: ${snapshot.error}'));
                   } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return const Center(child: Text('Ürün bulunamadı.'));
+                    return const Center(
+                      child: Text('The product could not be found.'),
+                    );
                   }
 
                   // Bütün ürünleri alıyoruz
@@ -128,7 +130,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Eğer arama sonucunda ürün kalmadıysa
                   if (filteredProducts.isEmpty) {
                     return const Center(
-                      child: Text('Aradığınız ürün bulunamadı.'),
+                      child: Text(
+                        'The product you are looking for could not be found.',
+                      ),
                     );
                   }
 

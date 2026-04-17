@@ -27,18 +27,18 @@ class _CartScreenState extends State<CartScreen> {
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: const Text("Sepeti Boşalt"),
+                      title: const Text("Empty the Cart"),
                       content: const Text(
-                        "Sepetteki tüm ürünler silinecek. Emin misiniz?",
+                        "All items in the cart will be removed. Are you sure?",
                       ),
                       actions: [
                         TextButton(
-                          child: const Text("Vazgeç"),
+                          child: const Text("Cancel"),
                           onPressed: () => Navigator.of(context).pop(),
                         ),
                         TextButton(
                           child: const Text(
-                            "Sepeti Boşalt",
+                            "Empty the Cart",
                             style: TextStyle(color: Colors.red),
                           ),
                           onPressed: () {
@@ -49,7 +49,7 @@ class _CartScreenState extends State<CartScreen> {
                             Navigator.of(context).pop();
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Sepet tamamen boşaltıldı.'),
+                                content: Text('Cart emptied successfully.'),
                               ),
                             );
                           },
@@ -60,7 +60,7 @@ class _CartScreenState extends State<CartScreen> {
                 );
               },
               child: const Text(
-                'Sepeti Boşalt',
+                'Empty the Cart',
                 style: TextStyle(
                   color: Colors.red,
                   fontWeight: FontWeight.bold,
@@ -184,7 +184,7 @@ class _CartScreenState extends State<CartScreen> {
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Satın alma simülasyonu çalıştı!'),
+                            content: Text('Directed to payment gateway.'),
                           ),
                         );
                       },

@@ -94,10 +94,10 @@ Future<List<Product>> fetchProducts() async {
       return targetList.map((json) => Product.fromJson(json)).toList();
     } else {
       throw Exception(
-        'Veri çekilemedi: Sunucu ${response.statusCode} hatası döndürdü.',
+        'Could not fetch the data: Server ${response.statusCode} error returned.',
       );
     }
   } catch (error) {
-    throw Exception('Ağ hatası oluştu: $error');
+    throw Exception('Network error: $error');
   }
 }

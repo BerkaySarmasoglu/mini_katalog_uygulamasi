@@ -131,7 +131,7 @@ class ProductDetailScreen extends StatelessWidget {
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text('${product.title} sepete eklendi!'),
+                            content: Text('${product.title} added to cart!'),
                             duration: const Duration(seconds: 2),
                           ),
                         );
