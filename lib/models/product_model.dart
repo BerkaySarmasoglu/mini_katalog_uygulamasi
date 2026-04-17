@@ -17,22 +17,22 @@ class Product {
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
+    // $0.0 -> 0.0
+    String rawPrice = json['price']?.toString() ?? '0';
+    String cleanPrice = rawPrice.replaceAll(RegExp(r'[^0-9.]'), '');
     return Product(
       // id null gelirse veya yoksa '0' ata
       id: json['id']?.toString() ?? '0',
 
       // title null gelirse 'İsimsiz Ürün' ata
-      title: json['title'] ?? 'İsimsiz Ürün',
+      title: json['name'] ?? 'İsimsiz Ürün',
 
       // description null gelirse varsayılan metin ata
       description: json['description'] ?? 'Bu ürün için açıklama bulunmuyor.',
 
-      // Fiyat kısmı biraz daha hassas, null veya hatalı string gelme ihtimaline karşı tryParse
-      price: json['price'] != null
-          ? double.tryParse(json['price'].toString()) ?? 0.0
-          : 0.0,
+      // Temizlenmiş fiyat double'a
+      price: double.tryParse(cleanPrice) ?? 0.0,
 
-      // imageUrl'i daha önce çözmüştük
       imageUrl: json['image'] ?? 'https://via.placeholder.com/150',
     );
   }
@@ -70,6 +70,10 @@ Future<List<Product>> fetchProducts() async {
             }
           }
         }
+      }
+      if (targetList.isNotEmpty) {
+        // API'den gelen ham JSON objesinin ilk elemanını konsola yazdırıyoruz
+        print('GELEN İLK ÜRÜN VERİSİ: ${targetList.first}');
       }
 
       // Bulduğumuz asıl listeyi Product modeline dönüştürüyoruz
