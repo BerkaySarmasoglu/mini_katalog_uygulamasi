@@ -92,77 +92,142 @@ class _CartScreenState extends State<CartScreen> {
               children: [
                 Expanded(
                   child: ListView.builder(
+                    padding: const EdgeInsets.all(
+                      16,
+                    ), // Sayfa kenarlarından boşluk
                     itemCount: cartItems.length,
                     itemBuilder: (context, index) {
                       final cartItem = cartItems[index];
                       final product = cartItem.product;
 
-                      return ListTile(
-                        leading: Container(
-                          width: 50,
-                          height: 50,
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                          bottom: 16.0,
+                        ), // Kartlar arası boşluk
+                        child: Container(
+                          // ANA SAYFA İLE AYNI ÇERÇEVE VE GÖLGE KALIBI
                           decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(8),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.grey.shade300,
+                              width: 1,
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.03),
+                                blurRadius: 8,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                           ),
-                          child: Image.network(
-                            product.imageUrl,
-                            fit: BoxFit.contain,
-                            errorBuilder: (context, error, stackTrace) =>
-                                const Icon(Icons.image, color: Colors.grey),
-                          ),
-                        ),
-                        title: Text(
-                          product.title,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        // Fiyatı o anki miktar ile çarparak gösteriyoruz
-                        subtitle: Text(
-                          '\$${(product.price * cartItem.quantity).toStringAsFixed(2)}',
-                          style: const TextStyle(color: Colors.blue),
-                        ),
+                          child: Row(
+                            children: [
+                              // STANDART GÖRSEL ALANI (Açık Gri Arka Plan)
+                              Container(
+                                width: 100,
+                                height: 100,
+                                decoration: const BoxDecoration(
+                                  color: Color(0xFFF8F9FA),
+                                  borderRadius: BorderRadius.horizontal(
+                                    left: Radius.circular(
+                                      11,
+                                    ), // Çerçeveye tam uyum
+                                  ),
+                                ),
+                                padding: const EdgeInsets.all(12),
+                                child: Image.network(
+                                  product.imageUrl,
+                                  fit: BoxFit.contain,
+                                  errorBuilder: (context, error, stackTrace) =>
+                                      const Icon(
+                                        Icons.devices,
+                                        color: Colors.grey,
+                                      ),
+                                ),
+                              ),
 
-                        // Miktar kontrol alanı (+ / - butonları)
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              icon: const Icon(
-                                Icons.remove_circle_outline,
-                                color: Colors.black54,
+                              // METİN VE KONTROL ALANI
+                              Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        product.title,
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 15,
+                                          color: Colors.black87,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      const SizedBox(height: 6),
+                                      Text(
+                                        '\$${(product.price * cartItem.quantity).toStringAsFixed(2)}',
+                                        style: const TextStyle(
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               ),
-                              onPressed: () {
-                                setState(() {
-                                  if (cartItem.quantity > 1) {
-                                    // Miktar 1'den büyükse sadece azalt
-                                    cartItem.quantity--;
-                                  } else {
-                                    // Miktar 1 ise listeden tamamen çıkar
-                                    cartItems.removeAt(index);
-                                  }
-                                });
-                              },
-                            ),
-                            Text(
-                              '${cartItem.quantity}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
+
+                              // MİKTAR KONTROLLERİ
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Row(
+                                  children: [
+                                    IconButton(
+                                      visualDensity: VisualDensity.compact,
+                                      icon: const Icon(
+                                        Icons.remove_circle_outline,
+                                        size: 22,
+                                        color: Colors.black54,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          if (cartItem.quantity > 1) {
+                                            cartItem.quantity--;
+                                          } else {
+                                            cartItems.removeAt(index);
+                                          }
+                                        });
+                                      },
+                                    ),
+                                    Text(
+                                      '${cartItem.quantity}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15,
+                                      ),
+                                    ),
+                                    IconButton(
+                                      visualDensity: VisualDensity.compact,
+                                      icon: const Icon(
+                                        Icons.add_circle_outline,
+                                        size: 22,
+                                        color: Colors.black54,
+                                      ),
+                                      onPressed: () {
+                                        setState(() {
+                                          cartItem.quantity++;
+                                        });
+                                      },
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                            IconButton(
-                              icon: const Icon(
-                                Icons.add_circle_outline,
-                                color: Colors.black54,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  // Miktarı artır
-                                  cartItem.quantity++;
-                                });
-                              },
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       );
                     },
