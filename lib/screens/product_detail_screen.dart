@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:mini_katalog_uygulamasi/models/cart_model.dart';
 import '/models/product_model.dart';
 import '/models/cart_model.dart';
 
@@ -82,28 +81,35 @@ class ProductDetailScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 20),
-                  const Divider(color: Colors.grey),
-                  const SizedBox(height: 10),
-
-                  // Specifications Başlığı
-                  const Text(
-                    'Specifications',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 15),
-
-                  // Özellikler Satırı
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildSpecItem('Size', '3.3 inches'),
-                      _buildSpecItem('Audio', '360-degree'),
-                      _buildSpecItem('Colors', '5 colors'),
-                    ],
-                  ),
                   const SizedBox(height: 30),
 
+                  if (product.specs.isNotEmpty) ...[
+                    const Divider(color: Colors.grey),
+                    const SizedBox(height: 10),
+
+                    // Specifications Başlığı
+                    const Text(
+                      'Specifications',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 15),
+
+                    // Özellikler Satırı
+                    SizedBox(
+                      width: double.infinity,
+                      child: Wrap(
+                        alignment: WrapAlignment.spaceBetween,
+                        runSpacing: 16,
+                        children: product.specs.entries.map((entry) {
+                          return _buildSpecItem(entry.key, entry.value);
+                        }).toList(),
+                      ),
+                    ),
+                    const SizedBox(height: 30),
+                  ],
                   SizedBox(
                     width: double.infinity,
                     height: 50,

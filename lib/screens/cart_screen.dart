@@ -18,6 +18,57 @@ class _CartScreenState extends State<CartScreen> {
         backgroundColor: Colors.white,
         elevation: 0,
         iconTheme: const IconThemeData(color: Colors.black),
+        actions: [
+          if (cartItems.isNotEmpty) // Sadece sepet doluysa butonu göster
+            TextButton(
+              onPressed: () {
+                // Onay kutusu (Dialog) göstererek işlemi doğrula
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: const Text("Sepeti Boşalt"),
+                      content: const Text(
+                        "Sepetteki tüm ürünler silinecek. Emin misiniz?",
+                      ),
+                      actions: [
+                        TextButton(
+                          child: const Text("Vazgeç"),
+                          onPressed: () => Navigator.of(context).pop(),
+                        ),
+                        TextButton(
+                          child: const Text(
+                            "Sepeti Boşalt",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          onPressed: () {
+                            // Listeyi temizle ve arayüzü yenile
+                            setState(() {
+                              cartItems.clear();
+                            });
+                            Navigator.of(context).pop();
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text('Sepet tamamen boşaltıldı.'),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: const Text(
+                'Sepeti Boşalt',
+                style: TextStyle(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+        ],
       ),
       body: cartItems.isEmpty
           ? const Center(

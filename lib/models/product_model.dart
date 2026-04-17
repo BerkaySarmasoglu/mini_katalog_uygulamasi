@@ -7,6 +7,7 @@ class Product {
   final String description;
   final double price;
   final String imageUrl;
+  final Map<String, String> specs;
 
   Product({
     required this.id,
@@ -14,26 +15,43 @@ class Product {
     required this.description,
     required this.price,
     required this.imageUrl,
+    required this.specs,
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
-    // $0.0 -> 0.0
     String rawPrice = json['price']?.toString() ?? '0';
     String cleanPrice = rawPrice.replaceAll(RegExp(r'[^0-9.]'), '');
+
+    // 1. Başlangıçta boş ve temiz bir Map oluşturuyoruz (Asla null olmaması garanti)
+    Map<String, String> parsedSpecs = {};
+
+    // 2. Gelen 'specs' verisinin null olmadığını VE gerçekten bir Obje (Map) olduğunu kontrol ediyoruz
+    if (json['specs'] != null && json['specs'] is Map) {
+      // 3. Tip uyuşmazlığını engellemek için önce dynamic olarak alıyoruz
+      final Map<dynamic, dynamic> rawSpecs = json['specs'];
+
+      rawSpecs.forEach((key, value) {
+        // 4. İçerideki anahtar veya değerlerden biri bozuk/null ise uygulamayı çökertmeden atlıyoruz
+        if (key != null && value != null) {
+          String formattedKey = key.toString();
+          if (formattedKey.isNotEmpty) {
+            formattedKey =
+                formattedKey[0].toUpperCase() + formattedKey.substring(1);
+          }
+          // Veriyi güvenle String'e çevirip listemize ekliyoruz
+          parsedSpecs[formattedKey] = value.toString();
+        }
+      });
+    }
+
     return Product(
-      // id null gelirse veya yoksa '0' ata
       id: json['id']?.toString() ?? '0',
-
-      // title null gelirse 'İsimsiz Ürün' ata
-      title: json['name'] ?? 'İsimsiz Ürün',
-
-      // description null gelirse varsayılan metin ata
+      // Hem 'name' hem 'title' gelme ihtimaline karşı çifte güvenlik:
+      title: json['name'] ?? json['title'] ?? 'İsimsiz Ürün',
       description: json['description'] ?? 'Bu ürün için açıklama bulunmuyor.',
-
-      // Temizlenmiş fiyat double'a
       price: double.tryParse(cleanPrice) ?? 0.0,
-
       imageUrl: json['image'] ?? 'https://via.placeholder.com/150',
+      specs: parsedSpecs,
     );
   }
 }
@@ -70,10 +88,6 @@ Future<List<Product>> fetchProducts() async {
             }
           }
         }
-      }
-      if (targetList.isNotEmpty) {
-        // API'den gelen ham JSON objesinin ilk elemanını konsola yazdırıyoruz
-        print('GELEN İLK ÜRÜN VERİSİ: ${targetList.first}');
       }
 
       // Bulduğumuz asıl listeyi Product modeline dönüştürüyoruz
