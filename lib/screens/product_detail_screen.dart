@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/product_model.dart'; // Product modelini kullanabilmek için şart
+import 'package:mini_katalog_uygulamasi/models/cart_model.dart';
+import '/models/product_model.dart';
+import '/models/cart_model.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   // 1. Değişkeni tanımlıyoruz
@@ -102,13 +104,12 @@ class ProductDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
 
-                  // Sepete Ekle Butonu (Simülasyon için) [cite: 48]
                   SizedBox(
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        // Burada ileride sepet state'ini güncelleyeceğiz [cite: 106]
+                        cartItems.add(product);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('${product.title} sepete eklendi!'),
