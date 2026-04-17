@@ -1,6 +1,6 @@
 # Mini Katalog Uygulaması 📱
 
-Bu proje, Flutter temel eğitim kampı kapsamında geliştirilmiş, dinamik veri çekme ve sepet yönetimi özelliklerine sahip profesyonel bir mobil katalog uygulaması taslağıdır.
+Bu proje, dinamik veri çekme ve sepet yönetimi özelliklerine sahip profesyonel bir mobil katalog uygulaması taslağıdır.
 
 ## 📝 Proje Açıklaması
 Uygulama, bir API üzerinden ürün verilerini çekerek kullanıcıya sunar. Kullanıcılar ürünler arasında arama yapabilir, ürün detaylarını inceleyebilir ve ürünleri miktarlarıyla birlikte sepete ekleyip yönetebilirler. Proje boyunca temiz kod prensipleri ve etkili klasörleme mimarisi uygulanmıştır.
@@ -19,12 +19,10 @@ Uygulama, bir API üzerinden ürün verilerini çekerek kullanıcıya sunar. Kul
 * **Paketler:** `http: ^1.1.0` (Ağ istekleri için)
 
 ## 📂 Proje Yapısı
-Eğitim yönergesine uygun olarak kurgulanan klasör mimarisi:
 ```text
 lib/
 ├── models/      # Product ve CartItem modelleri
 ├── screens/     # Home, Product Detail ve Cart ekranları
-├── widgets/     # Özel tasarım bileşenleri (opsiyonel)
 └── main.dart    # Uygulama giriş noktası
 ```
 
