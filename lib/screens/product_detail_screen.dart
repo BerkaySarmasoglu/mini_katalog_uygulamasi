@@ -80,6 +80,26 @@ class ProductDetailScreen extends StatelessWidget {
                     ),
                   ),
 
+                  const SizedBox(height: 20),
+                  const Divider(color: Colors.grey),
+                  const SizedBox(height: 10),
+
+                  // Specifications Başlığı
+                  const Text(
+                    'Specifications',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 15),
+
+                  // Özellikler Satırı
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      _buildSpecItem('Size', '3.3 inches'),
+                      _buildSpecItem('Audio', '360-degree'),
+                      _buildSpecItem('Colors', '5 colors'),
+                    ],
+                  ),
                   const SizedBox(height: 30),
 
                   // Sepete Ekle Butonu (Simülasyon için) [cite: 48]
@@ -115,4 +135,18 @@ class ProductDetailScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _buildSpecItem(String title, String value) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(title, style: const TextStyle(color: Colors.grey, fontSize: 14)),
+      const SizedBox(height: 4),
+      Text(
+        value,
+        style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+      ),
+    ],
+  );
 }
