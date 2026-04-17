@@ -3,8 +3,17 @@ import '../models/product_model.dart';
 import 'cart_screen.dart';
 import 'product_detail_screen.dart';
 
-class HomeScreen extends StatelessWidget {
+// 1. Arama durumunu tutabilmek için StatefulWidget'a geçtik
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  // 2. Kullanıcının arama çubuğuna yazdığı metni tutacak değişken
+  String searchQuery = '';
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +23,7 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         title: const Text(
-          'Discover', //
+          'Discover',
           style: TextStyle(
             color: Colors.black,
             fontSize: 28,
@@ -29,7 +38,6 @@ class HomeScreen extends StatelessWidget {
               size: 28,
             ),
             onPressed: () {
-              // Sepet sayfasına yönlendirme [cite: 103]
               Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => const CartScreen()),
@@ -49,24 +57,29 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 16),
 
-            // Arama Çubuğu [cite: 42, 75]
+            // Arama Çubuğu Güncellemesi
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
                 color: Colors.grey[100],
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: const TextField(
-                decoration: InputDecoration(
+              child: TextField(
+                // 3. Kullanıcı her harf girdiğinde state'i güncelliyoruz
+                onChanged: (value) {
+                  setState(() {
+                    searchQuery = value.toLowerCase();
+                  });
+                },
+                decoration: const InputDecoration(
                   icon: Icon(Icons.search, color: Colors.grey),
-                  hintText: 'Search products', //
+                  hintText: 'Search products',
                   border: InputBorder.none,
                 ),
               ),
             ),
             const SizedBox(height: 20),
 
-            // GIFT STORE Banner [cite: 68, 76]
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(16),
@@ -77,14 +90,14 @@ class HomeScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Image.network(
-                    'https://wantapi.com/assets/banner.png', // [cite: 68]
+                    'https://wantapi.com/assets/banner.png',
                     height: 40,
                     errorBuilder: (context, error, stackTrace) =>
                         const Icon(Icons.card_giftcard, color: Colors.blue),
                   ),
                   const SizedBox(width: 12),
                   const Text(
-                    'GIFT STORE', //
+                    'GIFT STORE',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                 ],
@@ -92,10 +105,9 @@ class HomeScreen extends StatelessWidget {
             ),
             const SizedBox(height: 20),
 
-            // Ürün Listesi (GridView)
             Expanded(
               child: FutureBuilder<List<Product>>(
-                future: fetchProducts(), // HTTP üzerinden veri çekme [cite: 60]
+                future: fetchProducts(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return const Center(child: CircularProgressIndicator());
@@ -105,21 +117,35 @@ class HomeScreen extends StatelessWidget {
                     return const Center(child: Text('Ürün bulunamadı.'));
                   }
 
-                  final products = snapshot.data!;
+                  // Bütün ürünleri alıyoruz
+                  final allProducts = snapshot.data!;
+
+                  // 4. Arama sorgusuna göre ürünleri filtreliyoruz
+                  final filteredProducts = allProducts.where((product) {
+                    return product.title.toLowerCase().contains(searchQuery);
+                  }).toList();
+
+                  // Eğer arama sonucunda ürün kalmadıysa
+                  if (filteredProducts.isEmpty) {
+                    return const Center(
+                      child: Text('Aradığınız ürün bulunamadı.'),
+                    );
+                  }
+
+                  // 5. GridView'a artık tüm ürünleri değil, sadece filtrelenmiş ürünleri (filteredProducts) veriyoruz
                   return GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2, // İki sütunlu yapı [cite: 46]
+                          crossAxisCount: 2,
                           crossAxisSpacing: 16,
                           mainAxisSpacing: 16,
                           childAspectRatio: 0.75,
                         ),
-                    itemCount: products.length,
+                    itemCount: filteredProducts.length,
                     itemBuilder: (context, index) {
-                      final product = products[index];
+                      final product = filteredProducts[index];
                       return GestureDetector(
                         onTap: () {
-                          // Sayfalar arası veri taşıma (Route Arguments) [cite: 36, 104]
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -139,7 +165,7 @@ class HomeScreen extends StatelessWidget {
                                 ),
                                 child: Center(
                                   child: Image.network(
-                                    product.imageUrl, // [cite: 41]
+                                    product.imageUrl,
                                     fit: BoxFit.contain,
                                     errorBuilder:
                                         (context, error, stackTrace) =>
@@ -154,7 +180,7 @@ class HomeScreen extends StatelessWidget {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              product.title, // [cite: 77, 80, 91]
+                              product.title,
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 14,
