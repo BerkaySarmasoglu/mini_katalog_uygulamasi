@@ -43,7 +43,9 @@ class _CartScreenState extends State<CartScreen> {
                   child: ListView.builder(
                     itemCount: cartItems.length,
                     itemBuilder: (context, index) {
-                      final item = cartItems[index];
+                      final cartItem = cartItems[index];
+                      final product = cartItem.product;
+
                       return ListTile(
                         leading: Container(
                           width: 50,
@@ -53,31 +55,63 @@ class _CartScreenState extends State<CartScreen> {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Image.network(
-                            item.imageUrl,
+                            product.imageUrl,
                             fit: BoxFit.contain,
                             errorBuilder: (context, error, stackTrace) =>
                                 const Icon(Icons.image, color: Colors.grey),
                           ),
                         ),
                         title: Text(
-                          item.title,
+                          product.title,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
+                        // Fiyatı o anki miktar ile çarparak gösteriyoruz
                         subtitle: Text(
-                          '\$${item.price}',
+                          '\$${(product.price * cartItem.quantity).toStringAsFixed(2)}',
                           style: const TextStyle(color: Colors.blue),
                         ),
-                        trailing: IconButton(
-                          icon: const Icon(
-                            Icons.remove_circle_outline,
-                            color: Colors.red,
-                          ),
-                          onPressed: () {
-                            // Ürünü listeden çıkar ve ekranı yenile
-                            setState(() {
-                              cartItems.removeAt(index);
-                            });
-                          },
+
+                        // Miktar kontrol alanı (+ / - butonları)
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(
+                                Icons.remove_circle_outline,
+                                color: Colors.black54,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  if (cartItem.quantity > 1) {
+                                    // Miktar 1'den büyükse sadece azalt
+                                    cartItem.quantity--;
+                                  } else {
+                                    // Miktar 1 ise listeden tamamen çıkar
+                                    cartItems.removeAt(index);
+                                  }
+                                });
+                              },
+                            ),
+                            Text(
+                              '${cartItem.quantity}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.add_circle_outline,
+                                color: Colors.black54,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  // Miktarı artır
+                                  cartItem.quantity++;
+                                });
+                              },
+                            ),
+                          ],
                         ),
                       );
                     },

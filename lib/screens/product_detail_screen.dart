@@ -109,10 +109,24 @@ class ProductDetailScreen extends StatelessWidget {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: () {
-                        cartItems.add(product);
+                        final existingItemIndex = cartItems.indexWhere(
+                          (item) => item.product.id == product.id,
+                        );
+
+                        if (existingItemIndex != -1) {
+                          // Ürün zaten sepetteyse miktarını 1 artır
+                          cartItems[existingItemIndex].quantity++;
+                        } else {
+                          // Ürün sepette yoksa listeye miktar 1 olarak yeni kayıt ekle
+                          cartItems.add(
+                            CartItem(product: product, quantity: 1),
+                          );
+                        }
+
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('${product.title} sepete eklendi!'),
+                            duration: const Duration(seconds: 2),
                           ),
                         );
                       },

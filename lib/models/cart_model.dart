@@ -1,3 +1,10 @@
 import 'product_model.dart';
 
-final List<Product> cartItems = [];
+class CartItem {
+  final Product product;
+  int quantity;
+
+  CartItem({required this.product, this.quantity = 1});
+}
+
+final List<CartItem> cartItems = [];
